@@ -34,13 +34,6 @@ package kr.ac.kpu.kimkt.sliceit;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-class Polygon
-{
-    Array coordinate;
-
-
-}
-
 class PolyK
 {
     float x, y;
@@ -199,7 +192,7 @@ class PolyK
                 tgs.add((float)i0);
                 tgs.add((float)i1);
                 tgs.add((float)i2);
-                avl.splice((i+1)% al, 1);
+                avl.remove((i+1)% al); // avl.splice((i+1)% al, 1);
                 al--;
                 i = 0;
             }
@@ -212,6 +205,8 @@ class PolyK
 
         return tgs;
     }
+
+
 
 
     private boolean convex(float ax, float ay, float bx, float by, float cx, float cy) {
@@ -236,7 +231,28 @@ class PolyK
 
         return null;
     }
+    private boolean PointInTriangle(Float px, Float py, float ax, float ay, float bx, float by, float cx, float cy) {
+        float v0x = cx-ax;
+        float v0y = cy-ay;
+        float v1x = bx-ax;
+        float v1y = by-ay;
+        float v2x = px-ax;
+        float v2y = py-ay;
 
+        float dot00 = v0x*v0x+v0y*v0y;
+        float dot01 = v0x*v1x+v0y*v1y;
+        float dot02 = v0x*v2x+v0y*v2y;
+        float dot11 = v1x*v1x+v1y*v1y;
+        float dot12 = v1x*v2x+v1y*v2y;
+
+        float invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+        float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+        float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+        // Check if point is in triangle
+        return (u >= 0) && (v >= 0) && (u + v < 1);
+
+    }
     private boolean InRect(Point a, Point b, Point c) {       // a in Rect( b, c)
 
         float minx = Math.min(b.x, c.x), maxx = Math.max(b.x, c.x);
