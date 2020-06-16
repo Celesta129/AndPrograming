@@ -164,15 +164,51 @@ class PolyK
         if( n < 3 ) return new ArrayList<Float>();
 
         ArrayList<Float> tgs = new ArrayList<Float>();
-        ArrayList<Float> avl = new ArrayList<Float>();
+        ArrayList<Integer> avl = new ArrayList<Integer>();
 
-        for(int i = 0; i < n; ++i) avl.add((float)i);
+        for(int i = 0; i < n; ++i) avl.add(i);
         int i = 0;
         int al = n;
         while(al > 3)
         {
-            
+            int i0 = avl.get((i+0)% al);
+            int i1 = avl.get((i+1)% al);
+            int i2 = avl.get((i+2)% al);
+
+            float ax = polygon.get(2*i0), ay = polygon.get(2*i0 + 1);
+            float bx = polygon.get(2*i1), by = polygon.get(2*i1 + 1);
+            float cx = polygon.get(2*i2), cy = polygon.get(2*i2 + 1);
+
+            boolean earFound = false;
+            if(convex(ax, ay, bx, by, cx, cy))
+            {
+                earFound = true;
+                for(int j = 0; j < al; j++)
+                {
+                    int vi = avl.get(j);
+                    if(vi == i0 || vi == i1 || vi == i2) continue;
+                    if(PointInTriangle(polygon.get(2*vi), polygon.get(2*vi+1), ax, ay, bx, by, cx, cy))
+                    {
+                        earFound = false;
+                        break;
+                    }
+                }
+            }
+            if(earFound)
+            {
+                tgs.add((float)i0);
+                tgs.add((float)i1);
+                tgs.add((float)i2);
+                avl.splice((i+1)% al, 1);
+                al--;
+                i = 0;
+            }
+            else if(i++ > 3*al) break;      // no convex angles :(
+
         }
+        tgs.add((float)avl.get(0));
+        tgs.add((float)avl.get(1));
+        tgs.add((float)avl.get(2));
 
         return tgs;
     }
