@@ -32,6 +32,7 @@ package kr.ac.kpu.kimkt.sliceit;
 	*/
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 class Polygon
 {
@@ -61,9 +62,9 @@ class PolyK
 
         return p;
     }
-    boolean isSimple(float[] polygon)
+    boolean isSimple(ArrayList<Float> polygon)
     {
-        int n = polygon.length / 2;
+        int n = polygon.size() / 2;
         if(n < 4) return true;
 
         Point a1 = _P(0, 0), a2 = _P(0, 0);
@@ -72,19 +73,19 @@ class PolyK
 
         for(int i = 0; i < n; ++i)
         {
-            a1.x = polygon[2*i];
-            a1.y = polygon[2*i + 1];
-            if(i == n-1) { a2.x = polygon[0]; a2.y = polygon[1]; }
-            else        { a2.x = polygon[2*i+2]; a2.y = polygon[2*i + 3]; }
+            a1.x = polygon.get(2*i);
+            a1.y = polygon.get(2 * i + 1);
+            if(i == n-1) { a2.x = polygon.get(0); a2.y = polygon.get(1); }
+            else        { a2.x = polygon.get(2 * i+2); a2.y = polygon.get(2 * i+3); }
             for(int j = 0; j < n; ++j)
             {
                 if(Math.abs(i - j) < 2) continue;
                 if(j==n-1 && j==0) continue;
 
-                b1.x = polygon[2*j];
-                b1.y = polygon[2*j+1];
-                if(j==n-1)  {b2.x = polygon[0]; b2.y = polygon[1];}
-                else        {b2.x = polygon[2*j+2]; b2.y = polygon[2*j+3];}
+                b1.x = polygon.get(2 * j);
+                b1.y = polygon.get(2 * j+1);
+                if(j==n-1)  {b2.x = polygon.get(0); b2.y = polygon.get(1);}
+                else        {b2.x = polygon.get(2 * j+2); b2.y = polygon.get(2 * j+3);}
 
                 if(GetLineIntersection(a1, a2, b1, b2, c) != null) return false;
             }
@@ -93,26 +94,26 @@ class PolyK
 
         return true;
     }
-    boolean isConvex(float[] polygon)
+    boolean isConvex(ArrayList<Float> polygon)
     {
-        if(polygon.length<6) return false;
-        int l = polygon.length - 4;
+        if(polygon.size()<6) return false;
+        int l = polygon.size() - 4;
         for(int i = 0; i < l; i+=2)
         {
-            if(!convex(polygon[i], polygon[i+1], polygon[i+2], polygon[i+3], polygon[i+4], polygon[i+5])) return false;
+            if(!convex(polygon.get(i), polygon.get(i + 1), polygon.get(i + 2), polygon.get(i + 3), polygon.get(i + 4), polygon.get(i + 5))) return false;
         }
-        if(convex(polygon[l], polygon[l+1], polygon[l+2], polygon[l+3], polygon[0], polygon[1])) return false;
-        if(convex(polygon[l+2], polygon[l+3], polygon[0], polygon[1], polygon[2], polygon[3])) return false;
+        if(convex(polygon.get(l), polygon.get(l + 1), polygon.get(l + 2), polygon.get(l + 3), polygon.get(0), polygon.get(1))) return false;
+        if(convex(polygon.get(l + 2), polygon.get(l + 3), polygon.get(0), polygon.get(1), polygon.get(2), polygon.get(3))) return false;
         return true;
     }
-    float GetArea(float[] polygon)
+    float GetArea(ArrayList<Float> polygon)
     {
-        if(polygon.length <6) return 0;
-        int l = polygon.length - 2;
+        if(polygon.size() <6) return 0;
+        int l = polygon.size() - 2;
         float sum = 0;
         for(int i=0; i<l; i+=2)
-            sum += (polygon[i+2]-polygon[i]) * (polygon[i+1]+polygon[i+3]);
-        sum += (polygon[0]-polygon[l]) * (polygon[l+1]+polygon[1]);
+            sum += (polygon.get(i + 2) - polygon.get(i)) * (polygon.get(i + 1) + polygon.get(i + 3));
+        sum += (polygon.get(0) - polygon.get(l)) * (polygon.get(l + 1) + polygon.get(1));
 
         return - sum * 0.5f;
     }
@@ -146,19 +147,36 @@ class PolyK
         return new AABB(minx, miny, maxx-minx, maxy-miny);
     }
 
-    float[] Reverse(float[] polygon)
+    ArrayList<Float> Reverse(ArrayList<Float> polygon)
     {
-        float[] np = new float[polygon.length];
+        ArrayList<Float> np = new ArrayList<Float>();
         int i = 0;
-        for(int j = polygon.length-2; j >= 0; j-=2)
+        for(int j = polygon.size()-2; j >= 0; j-=2)
         {
-            np[i] = polygon[j];
-            np[i+1] = polygon[j+1];
-            i += 2;
+            np.add(polygon.get(j));
+            np.add(polygon.get(j+1));
         }
         return np;
     }
-    
+    ArrayList<Float> Triangulate(ArrayList<Float> polygon)
+    {
+        int n = polygon.size() / 2;
+        if( n < 3 ) return new ArrayList<Float>();
+
+        ArrayList<Float> tgs = new ArrayList<Float>();
+        ArrayList<Float> avl = new ArrayList<Float>();
+
+        for(int i = 0; i < n; ++i) avl.add((float)i);
+        int i = 0;
+        int al = n;
+        while(al > 3)
+        {
+            
+        }
+
+        return tgs;
+    }
+
 
     private boolean convex(float ax, float ay, float bx, float by, float cx, float cy) {
         return (ay-by)*(cx-bx) + (bx-ax)*(cy-by) >= 0;
