@@ -314,7 +314,7 @@ class PolyK
                 dir--;
                 ArrayList<Point> pgn = GetPoints(ps, ind0, ind1);
 
-                pgs.add(pgn);
+                pgs.add(pgn);   // original : pgs.push(pgn);
                 ps = GetPoints(ps, ind1, ind0);
                 i0.flag = i1.flag = false;
                 iscs.splice(0,2);
