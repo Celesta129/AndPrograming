@@ -251,10 +251,10 @@ class PolyK
 
         return (depth & 1) == 1;
     }
-    Slice(ArrayList<Float> polygon, float ax, float ay, float bx, float by)
+    ArrayList<Float> Slice(ArrayList<Float> polygon, float ax, float ay, float bx, float by)
     {
         if(ConstainsPoint(polygon, ax, ay) || ConstainsPoint(polygon, bx, by))
-            return [p.slice(0)];
+            return polygon; // original : return [p.slice(0)]
 
         final Point a = _P(ax, ay);
         Point b = _P(bx, by);
@@ -280,14 +280,14 @@ class PolyK
 
         }
 
-        if(iscs.size() < 2) return [p.slice(0)];
+        if(iscs.size() < 2) return polygon;
         Collections.sort(iscs, new Comparator<Point>() {
             @Override
             public int compare(Point p1, Point p2) {
                 return (int) (Point.dist(a, p1) - Point.dist(a, p2));
             }
         });
-       var pgs = new ArrayList<>();
+        ArrayList<ArrayList<Point>> pgs = new ArrayList<>();
         float dir = 0;
         while(iscs.size() > 0)
         {
@@ -314,16 +314,34 @@ class PolyK
                 dir--;
                 ArrayList<Point> pgn = GetPoints(ps, ind0, ind1);
 
-                pgs.add(pgn);   // original : pgs.push(pgn);
+                pgs.add(pgn);// original : pgs.push(pgn);
+
                 ps = GetPoints(ps, ind1, ind0);
                 i0.flag = i1.flag = false;
-                iscs.splice(0,2);
+
+                for(int i = 0; i < 2; ++i)
+                {
+                    iscs.remove(i); //  iscs.splice(0,2);
+                }
                 if(iscs.size() == 0) pgs.add(ps);
             }
 
-            else { dir++; iscs.reverse(); }
+            else { dir++; Collections.reverse(iscs);}  // dir++; iscs.reverse();
             if(dir>1) break;
         }
+        ArrayList<Float> result = new ArrayList<>();
+        for(int i=0; i<pgs.size(); i++)
+        {
+            ArrayList<Point> pg = pgs.get(i);
+            ArrayList<Float> npg = new ArrayList<>();
+            for(int j=0; j<pg.size(); j++)
+            {
+                npg.add(pg.get(j).x);
+                npg.add(pg.get(j).y);
+            }
+            result.addAll(npg);
+        }
+        return result;
     }
 
     private int FirstWithFlag(ArrayList<Point> ps, int ind) {
