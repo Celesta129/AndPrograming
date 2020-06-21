@@ -1,4 +1,4 @@
-package kr.ac.kpu.kimkt.sliceit.ui;
+package kr.ac.kpu.kimkt.sliceit.res;
 
 import android.content.Context;
 import android.media.AudioAttributes;
@@ -8,7 +8,7 @@ import android.os.Build;
 
 import java.util.HashMap;
 
-import kr.ac.kpu.kimkt.blocksample.R;
+import kr.ac.kpu.kimkt.sliceit.R;
 
 public class SoundEffects {
     private Context context;
@@ -42,7 +42,7 @@ public class SoundEffects {
 
     }
     private static final int[] SOUND_IDS = {
-            R.raw.hadouken,
+            R.raw.slice_it_bgm,
     };
     private HashMap<Integer, Integer> soundIDMap = new HashMap<>();
 

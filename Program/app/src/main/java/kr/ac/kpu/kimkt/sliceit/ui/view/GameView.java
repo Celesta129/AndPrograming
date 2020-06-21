@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import androidx.annotation.Nullable;
 
 import kr.ac.kpu.kimkt.sliceit.game.GameWorld;
+import kr.ac.kpu.kimkt.sliceit.obj.SharedBitmap;
 import kr.ac.kpu.kimkt.sliceit.world.MainWorld;
 
 public class GameView extends View {
@@ -43,16 +44,18 @@ public class GameView extends View {
         WindowManager wm = (WindowManager) getContext().getSystemService(Service.WINDOW_SERVICE);
         Point size = new Point();
         wm.getDefaultDisplay().getSize(size);
+
+        SharedBitmap.setResources(getResources());
         mainRect = new Rect(0,0, size.x, size.y);
 
         //SharedBitmap.setResources(getResources());
         mainPaint = new Paint();
         mainPaint.setColor(0xFFFFEEEE);
 
-
         gameWorld = MainWorld.get();
         gameWorld.setRect(mainRect);
         gameWorld.initResource(this);
+
 
         postFrameCallBack();
     }

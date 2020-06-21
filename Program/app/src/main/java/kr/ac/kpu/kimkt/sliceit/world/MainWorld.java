@@ -1,14 +1,18 @@
 package kr.ac.kpu.kimkt.sliceit.world;
 
+import android.media.SoundPool;
 import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
+import kr.ac.kpu.kimkt.sliceit.R;
 import kr.ac.kpu.kimkt.sliceit.game.GameWorld;
 import kr.ac.kpu.kimkt.sliceit.iface.GameObject;
+import kr.ac.kpu.kimkt.sliceit.obj.Background;
 import kr.ac.kpu.kimkt.sliceit.obj.Line;
 import kr.ac.kpu.kimkt.sliceit.obj.Polygon;
+import kr.ac.kpu.kimkt.sliceit.res.SoundEffects;
 
 public class MainWorld extends GameWorld {
     public enum Layer{
@@ -37,6 +41,11 @@ public class MainWorld extends GameWorld {
         Polygon tmp = new Polygon();
         //ArrayList<Polygon> polygon = new ArrayList<>();
         add(Layer.polygon, tmp);
+
+        Background bg = new Background();
+        add(Layer.bg, bg);
+
+
     }
 
     @Override

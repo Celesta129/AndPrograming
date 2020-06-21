@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import kr.ac.kpu.kimkt.sliceit.R;
+import kr.ac.kpu.kimkt.sliceit.res.SoundEffects;
 import kr.ac.kpu.kimkt.sliceit.ui.view.GameView;
 import kr.ac.kpu.kimkt.sliceit.world.MainWorld;
 
@@ -22,8 +23,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         MainWorld.create();
+
+        SoundEffects se = SoundEffects.get();
+        se.init(this);
+        se.loadAll();
+        SoundEffects.get().play(R.raw.slice_it_bgm);
+
         gameView = new GameView(this);
         setContentView(gameView);
+
+
     }
 
     @Override
