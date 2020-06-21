@@ -8,7 +8,7 @@ import android.graphics.Point;
 import kr.ac.kpu.kimkt.sliceit.iface.GameObject;
 
 public class Line implements GameObject {
-    float x1, x2, y1, y2;
+    public float x1, x2, y1, y2;
 
     int color = Color.BLACK;
     Paint myPaint = new Paint();

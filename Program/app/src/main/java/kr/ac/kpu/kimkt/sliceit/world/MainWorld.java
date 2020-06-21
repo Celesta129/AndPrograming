@@ -43,19 +43,24 @@ public class MainWorld extends GameWorld {
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN)
         {
+            Log.d(TAG, "Touch Down");
             float x= event.getX(), y = event.getY();
-
             currLine = new Line(x,y,x,y);
 
+            Log.d(TAG, "Touch Move: x1: " + currLine.x1 + " y1: " + currLine.y1 +
+                      " x2" + currLine.x2 + " y2: " + currLine.y2);
             add(Layer.line, currLine);
         }
         else if(event.getAction() == MotionEvent.ACTION_MOVE)
         {
-            currLine.setPoints(Line.point.X2, event.getX());
-            currLine.setPoints(Line.point.Y2, event.getY());
+            Log.d(TAG, "Touch Move: x2: " + currLine.x2 + " y2: " + currLine.y2);
+
+            currLine.x2 = event.getX();
+            currLine.y2 = event.getY();
         }
         else if(event.getAction() == MotionEvent.ACTION_UP)
         {
+            Log.d(TAG, "Touch Up");
             for(GameObject objects: layers.get(Layer.polygon.ordinal())){
                 objects.slice(currLine);
 

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import kr.ac.kpu.kimkt.sliceit.PolyK;
 import kr.ac.kpu.kimkt.sliceit.iface.GameObject;
+import kr.ac.kpu.kimkt.sliceit.world.MainWorld;
 
 public class Polygon implements GameObject {
 
@@ -25,12 +26,14 @@ public class Polygon implements GameObject {
     }
 
     public Polygon() {
-        points.add(50.f);
-        points.add(50.f);
-        points.add(150.f);
-        points.add(50.f);
-        points.add(200.f);
-        points.add(200.f);
+        points.add(100.f);
+        points.add(100.f);
+        points.add(400.f);
+        points.add(100.f);
+        points.add(400.f);
+        points.add(500.f);
+        points.add(100.f);
+        points.add(500.f);
 
         myPaint.setColor(color);
         myPaint.setStrokeWidth(5f);
@@ -58,6 +61,12 @@ public class Polygon implements GameObject {
     @Override
     public void slice(Line line)
     {
-        points = PolyK.Slice(points, line.x1, line.y1, line.x2, line.y2);
+
+        ArrayList<ArrayList<Float>> result = PolyK.Slice(points, line.x1, line.y1, line.x2, line.y2);
+        for(int i = 0; i < result.size(); ++i)
+        {
+            MainWorld.get().add(MainWorld.Layer.polygon, new Polygon(result.get(i)));
+        }
+        MainWorld.get().remove(this);
     }
 }

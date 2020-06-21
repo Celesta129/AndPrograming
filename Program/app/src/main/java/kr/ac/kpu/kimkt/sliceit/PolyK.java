@@ -246,10 +246,14 @@ public class PolyK
 
         return (depth & 1) == 1;
     }
-    static public ArrayList<Float> Slice(ArrayList<Float> polygon, float ax, float ay, float bx, float by)
+    static public ArrayList<ArrayList<Float>> Slice(ArrayList<Float> polygon, float ax, float ay, float bx, float by)
     {
+        ArrayList<ArrayList<Float>> result = new ArrayList<>();
         if(ConstainsPoint(polygon, ax, ay) || ConstainsPoint(polygon, bx, by))
-            return polygon; // original : return [p.slice(0)]
+        {
+            result.add(polygon);
+            return result; // original : return [p.slice(0)]
+        }
 
         final Point a = _P(ax, ay);
         Point b = _P(bx, by);
@@ -261,8 +265,15 @@ public class PolyK
         {
             Point isc = _P(0,0);
             isc = GetLineIntersection(a, b, ps.get(i), ps.get((i+1) % ps.size()), isc);
-            Point fisc = iscs.get(0);
-            Point lisc = iscs.get(iscs.size()-1);
+            Point fisc = null;
+            if(iscs.size() != 0){
+                fisc = iscs.get(0);
+            }
+            Point lisc = null;
+            if(iscs.size() != 0){
+                lisc = iscs.get(iscs.size()-1);
+            }
+
             // original : isc && .......
             if(isc != null && (fisc== null || Point.dist(isc,fisc)>1e-10) &&
                     (lisc==null || Point.dist(isc,lisc)>1e-10 ) )//&& (isc.x!=ps[i].x || isc.y!=ps[i].y) )
@@ -275,7 +286,10 @@ public class PolyK
 
         }
 
-        if(iscs.size() < 2) return polygon;
+        if(iscs.size() < 2){
+            result.add(polygon);
+            return result;
+        }
         Collections.sort(iscs, new Comparator<Point>() {
             @Override
             public int compare(Point p1, Point p2) {
@@ -314,7 +328,7 @@ public class PolyK
                 ps = GetPoints(ps, ind1, ind0);
                 i0.flag = i1.flag = false;
 
-                for(int i = 0; i < 2; ++i)
+                for(int i = 1; i >= 0; i--)
                 {
                     iscs.remove(i); //  iscs.splice(0,2);
                 }
@@ -324,7 +338,7 @@ public class PolyK
             else { dir++; Collections.reverse(iscs);}  // dir++; iscs.reverse();
             if(dir>1) break;
         }
-        ArrayList<Float> result = new ArrayList<>();
+
         for(int i=0; i<pgs.size(); i++)
         {
             ArrayList<Point> pg = pgs.get(i);
@@ -334,7 +348,7 @@ public class PolyK
                 npg.add(pg.get(j).x);
                 npg.add(pg.get(j).y);
             }
-            result.addAll(npg);
+            result.add(npg);
         }
         return result;
     }
@@ -363,18 +377,18 @@ public class PolyK
     }
 
     static private Point GetLineIntersection(Point a1, Point a2, Point b1, Point b2, Point c) {
-        float dax = (a1.x - a2.x), dbx = (b1.x - b2.x);
-        float day = (a1.y - a2.y), dby = (b2.y - b2.y);
+        float dax = (a1.x-a2.x), dbx = (b1.x-b2.x);
+        float day = (a1.y-a2.y), dby = (b1.y-b2.y);
 
         float Den = dax*dby - day*dbx;
         if(Den == 0) return null;   // parallel
 
-        float A = a1.x * a2.y - a1.y * a2.x;
-        float B = b1.x * b2.y - b1.y * b2.x;
+        float A = (a1.x * a2.y - a1.y * a2.x);
+        float B = (b1.x * b2.y - b1.y * b2.x);
 
         Point l = c;
-        l.x = (A*dbx - dax*B) / Den;
-        l.y = (A*dby - day*B) / Den;
+        l.x = ( A*dbx - dax*B ) / Den;
+        l.y = ( A*dby - day*B ) / Den;
 
         if(InRect(l, a1, a2) && InRect(l, b1, b2)) return l;
 
@@ -404,13 +418,13 @@ public class PolyK
     }
     static private boolean InRect(Point a, Point b, Point c) {       // a in Rect( b, c)
 
-        float minx = Math.min(b.x, c.x), maxx = Math.max(b.x, c.x);
-        float miny = Math.min(b.y, c.y), maxy = Math.max(b.y, c.y);
+        float minx = Math.min(b.x,c.x), maxx = Math.max(b.x,c.x);
+        float miny = Math.min(b.y,c.y), maxy = Math.max(b.y,c.y);
 
-        if(minx == maxx) return (miny <= a.y && a.y <= maxy);
-        if(miny == maxy) return (minx <= a.x && a.x <= maxx);
+        if(minx == maxx) return (miny<=a.y && a.y<=maxy);
+        if(miny == maxy) return (minx<=a.x && a.x<=maxx);
 
-        return (minx <= a.x+1e-10 && a.x-1e-10 <= maxx && miny <= a.y+1e-10 && a.y-1e-10 <= maxy);
+        return (minx <= a.x+1e-10 && a.x-1e-10 <= maxx && miny <= a.y+1e-10 && a.y-1e-10 <= maxy) ;
     }
 
 
