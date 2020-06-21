@@ -10,6 +10,7 @@ import android.view.View;
 
 import kr.ac.kpu.kimkt.sliceit.R;
 import kr.ac.kpu.kimkt.sliceit.ui.view.GameView;
+import kr.ac.kpu.kimkt.sliceit.world.MainWorld;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        MainWorld.create();
         gameView = new GameView(this);
         setContentView(gameView);
     }

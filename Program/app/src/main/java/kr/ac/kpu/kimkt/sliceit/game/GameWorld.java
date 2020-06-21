@@ -37,6 +37,7 @@ public abstract class GameWorld {
 
 
     protected GameWorld() {
+
     }
     public ArrayList<GameObject> objectsAt(int index) {
         return layers.get(index);
@@ -60,6 +61,47 @@ public abstract class GameWorld {
             }
         }
 
+    }
+    public void update(long frameTimeNanos) {
+        this.timeDiffNanos = frameTimeNanos - this.frameTimeNanos;
+        this.frameTimeNanos = frameTimeNanos;
+
+        if(rect == null){
+            return;
+        }
+
+        for(ArrayList<GameObject> objects : layers){
+            for (GameObject o : objects) {
+                o.update();
+            }
+        }
+        if(trash.size() > 0){
+            removeTrashObject();
+        }
+        trash.clear();
+    }
+    public void add(final int index, final GameObject obj){
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<GameObject> objects = layers.get(index);
+                objects.add(obj);
+            }
+        });
+    }
+    private void removeTrashObject() {
+        for(int tIndex = trash.size() -1; tIndex >= 0; tIndex--){
+            GameObject tobj = trash.get(tIndex);
+            for(ArrayList<GameObject> objects : layers){
+                int index = objects.indexOf(tobj);
+                if(index >= 0){
+                    objects.remove(index);
+                    break;
+                }
+            }
+            trash.remove(tIndex);
+
+        }
     }
 
     protected void initLayers() {

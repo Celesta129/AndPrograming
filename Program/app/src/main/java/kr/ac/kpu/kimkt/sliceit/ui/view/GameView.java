@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import androidx.annotation.Nullable;
 
 import kr.ac.kpu.kimkt.sliceit.game.GameWorld;
+import kr.ac.kpu.kimkt.sliceit.world.MainWorld;
 
 public class GameView extends View {
     private static final String TAG = GameView.class.getSimpleName();
@@ -51,7 +52,7 @@ public class GameView extends View {
 
         gameWorld = MainWorld.get();
         gameWorld.setRect(mainRect);
-        //gameWorld.initResource(this);
+        gameWorld.initResource(this);
 
         postFrameCallBack();
     }
