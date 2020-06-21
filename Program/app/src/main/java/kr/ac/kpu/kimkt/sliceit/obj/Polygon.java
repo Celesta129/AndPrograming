@@ -28,12 +28,12 @@ public class Polygon implements GameObject {
     public Polygon() {
         points.add(100.f);
         points.add(100.f);
-        points.add(400.f);
+        points.add(1000.f);
         points.add(100.f);
-        points.add(400.f);
-        points.add(500.f);
+        points.add(1000.f);
+        points.add(1500.f);
         points.add(100.f);
-        points.add(500.f);
+        points.add(1500.f);
 
         myPaint.setColor(color);
         myPaint.setStrokeWidth(5f);
