@@ -48,15 +48,10 @@ class Point
     }
 
 }
-class PolyK
+public class PolyK
 {
-    float x, y;
 
-    boolean flag;
-
-
-
-    Point _P(float x, float y)
+    static Point _P(float x, float y)
     {
         Point p = new Point();
         p.x = x;
@@ -65,7 +60,7 @@ class PolyK
 
         return p;
     }
-    boolean isSimple(ArrayList<Float> polygon)
+    static public boolean isSimple(ArrayList<Float> polygon)
     {
         int n = polygon.size() / 2;
         if(n < 4) return true;
@@ -97,7 +92,7 @@ class PolyK
 
         return true;
     }
-    boolean isConvex(ArrayList<Float> polygon)
+    static public boolean isConvex(ArrayList<Float> polygon)
     {
         if(polygon.size()<6) return false;
         int l = polygon.size() - 4;
@@ -109,7 +104,7 @@ class PolyK
         if(Convex(polygon.get(l + 2), polygon.get(l + 3), polygon.get(0), polygon.get(1), polygon.get(2), polygon.get(3))) return false;
         return true;
     }
-    float GetArea(ArrayList<Float> polygon)
+    static public float GetArea(ArrayList<Float> polygon)
     {
         if(polygon.size() <6) return 0;
         int l = polygon.size() - 2;
@@ -121,7 +116,7 @@ class PolyK
         return - sum * 0.5f;
     }
 
-    class AABB
+    static class AABB
     {
         float x, y;
         float width, height;
@@ -133,7 +128,7 @@ class PolyK
             this.height = height;
         }
     }
-    AABB GetAABB(float[] polygon)
+    static public AABB GetAABB(float[] polygon)
     {
         float minx = 9999999;
         float miny = 9999999;
@@ -150,7 +145,7 @@ class PolyK
         return new AABB(minx, miny, maxx-minx, maxy-miny);
     }
 
-    ArrayList<Float> Reverse(ArrayList<Float> polygon)
+    static public ArrayList<Float> Reverse(ArrayList<Float> polygon)
     {
         ArrayList<Float> np = new ArrayList<Float>();
         int i = 0;
@@ -161,7 +156,7 @@ class PolyK
         }
         return np;
     }
-    ArrayList<Float> Triangulate(ArrayList<Float> polygon)
+    static public ArrayList<Float> Triangulate(ArrayList<Float> polygon)
     {
         int n = polygon.size() / 2;
         if( n < 3 ) return new ArrayList<Float>();
@@ -215,7 +210,7 @@ class PolyK
 
         return tgs;
     }
-    boolean ConstainsPoint(ArrayList<Float> polygon, float px, float py)    {
+    static public boolean ConstainsPoint(ArrayList<Float> polygon, float px, float py)    {
         int n = polygon.size() / 2;
         float ax, ay = polygon.get(2*n-3)-py, bx = polygon.get(2*n-2) - px, by = polygon.get(2*n-1) - py;
         boolean lup = by > ay;      // left up?
@@ -251,7 +246,7 @@ class PolyK
 
         return (depth & 1) == 1;
     }
-    ArrayList<Float> Slice(ArrayList<Float> polygon, float ax, float ay, float bx, float by)
+    static public ArrayList<Float> Slice(ArrayList<Float> polygon, float ax, float ay, float bx, float by)
     {
         if(ConstainsPoint(polygon, ax, ay) || ConstainsPoint(polygon, bx, by))
             return polygon; // original : return [p.slice(0)]
@@ -344,7 +339,7 @@ class PolyK
         return result;
     }
 
-    private int FirstWithFlag(ArrayList<Point> ps, int ind) {
+    static private int FirstWithFlag(ArrayList<Point> ps, int ind) {
         int n = ps.size();
         while(true)
         {
@@ -353,7 +348,7 @@ class PolyK
         }
     }
 
-    private ArrayList<Point> GetPoints(ArrayList<Point> ps, int ind0, int ind1) {
+    static private ArrayList<Point> GetPoints(ArrayList<Point> ps, int ind0, int ind1) {
         int n = ps.size();
         ArrayList<Point> nps = new ArrayList<>();
         if(ind1 < ind0) ind1 += n;
@@ -363,11 +358,11 @@ class PolyK
     }
 
 
-    private boolean Convex(float ax, float ay, float bx, float by, float cx, float cy) {
+    static private boolean Convex(float ax, float ay, float bx, float by, float cx, float cy) {
         return (ay-by)*(cx-bx) + (bx-ax)*(cy-by) >= 0;
     }
 
-    private Point GetLineIntersection(Point a1, Point a2, Point b1, Point b2, Point c) {
+    static private Point GetLineIntersection(Point a1, Point a2, Point b1, Point b2, Point c) {
         float dax = (a1.x - a2.x), dbx = (b1.x - b2.x);
         float day = (a1.y - a2.y), dby = (b2.y - b2.y);
 
@@ -385,7 +380,7 @@ class PolyK
 
         return null;
     }
-    private boolean PointInTriangle(Float px, Float py, float ax, float ay, float bx, float by, float cx, float cy) {
+    static private boolean PointInTriangle(Float px, Float py, float ax, float ay, float bx, float by, float cx, float cy) {
         float v0x = cx-ax;
         float v0y = cy-ay;
         float v1x = bx-ax;
@@ -407,7 +402,7 @@ class PolyK
         return (u >= 0) && (v >= 0) && (u + v < 1);
 
     }
-    private boolean InRect(Point a, Point b, Point c) {       // a in Rect( b, c)
+    static private boolean InRect(Point a, Point b, Point c) {       // a in Rect( b, c)
 
         float minx = Math.min(b.x, c.x), maxx = Math.max(b.x, c.x);
         float miny = Math.min(b.y, c.y), maxy = Math.max(b.y, c.y);

@@ -89,6 +89,9 @@ public abstract class GameWorld {
             }
         });
     }
+    public void remove(GameObject obj){
+        trash.add(obj);
+    }
     private void removeTrashObject() {
         for(int tIndex = trash.size() -1; tIndex >= 0; tIndex--){
             GameObject tobj = trash.get(tIndex);
